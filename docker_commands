@@ -1,0 +1,52 @@
+**docker image
+docker pull {container_name}
+docker image ls (muestra todas las imagenes locales)
+
+**pull and execute image of nginx
+docker container run --publish(-p) 80:80 nginx
+docker container run --publish 80:80 --detach(or -d) --name webhost nginx
+docker container run --publish 3306:3306 -d --env(or -e) MYSQL_RANDOM_ROOT_PASSWORD=yes --name databasemysql mysql
+
+**execute allready downloaded image
+docker container run -d --name nginx nginx
+
+**segundo plano
+docker container run --publish 80:80 --detach nginx
+docker container run -d --name databasemysql -e MYSQL_RANDOM_ROOT_PASSWORD=yes mysql
+
+**
+docker start {container_name}
+docker start -ai {container_name} consola
+
+**list
+docker container ls
+docker container ls -a
+//old
+docker ps
+
+**docker stop
+docker container stop {primero 3eros digitos del container_id}
+//old
+docker stop
+
+**logs
+docker container logs {container_name}
+
+**top process running in the container
+docker container top {container_name}
+docker container inspect {container_name}
+docker container stats {container_name} --help
+docker container stats {container_name}
+
+**remove
+ docker container rm {container_id} {container_id}
+//force
+docker container rm -f {container_id} {container_id}
+
+** shell inside container (it command)
+docker container run -it --name proxy nginx bash
+docker container run -it --name ubuntu ubuntu
+docker container run -it alpine sh
+
+** it on existing running container
+docker container exec -it {container_name} bash
