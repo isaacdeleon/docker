@@ -2,7 +2,7 @@
 docker pull {container_name}
 docker image ls (muestra todas las imagenes locales)
 
-**pull and execute image of nginx
+**pull and execute image of nginx (publish publica el puerto del contenedor al red del host)
 docker container run --publish(-p) 80:80 nginx
 docker container run --publish 80:80 --detach(or -d) --name webhost nginx
 docker container run --publish 3306:3306 -d --env(or -e) MYSQL_RANDOM_ROOT_PASSWORD=yes --name databasemysql mysql
@@ -14,7 +14,7 @@ docker container run -d --name nginx nginx
 docker container run --publish 80:80 --detach nginx
 docker container run -d --name databasemysql -e MYSQL_RANDOM_ROOT_PASSWORD=yes mysql
 
-**
+** start exisiting container
 docker start {container_name}
 docker start -ai {container_name} consola
 
@@ -28,6 +28,16 @@ docker ps
 docker container stop {primero 3eros digitos del container_id}
 //old
 docker stop
+
+**for multiple
+stop all containers:
+docker kill $(docker ps -q)
+
+remove all containers
+docker rm $(docker ps -a -q)
+
+remove all docker images
+docker rmi $(docker images -q)
 
 **logs
 docker container logs {container_name}
@@ -50,3 +60,40 @@ docker container run -it alpine sh
 
 ** it on existing running container
 docker container exec -it {container_name} bash
+
+**networking
+docker network ls
+docker network inspect {network_name}
+docker container port {container_name}
+docker container inspect --format '{{ .NetworkSettings.IPAddress }}' {container_name}
+
+docker network create --driver {driver_name(--network host, --network none)}
+docker network disconnect
+
+//add to existing network
+docker container run -d --name new_nginx --network my_app_net {network_name} nginx:alpine({image})
+//add existing container to a exisiting network
+docker network connect {network_id} {container_name}
+//remove from network
+docker network disconnect {network_id} {container_name}
+
+//ping between container
+docker container exec -it {container_name} ping {container_name}
+
+
+//tarea 2
+docker container run --rm(clean  up after exit) -it centos:7 bash
+docker container run --rm -it ubuntu:14.04 bash
+
+
+//tarea 3
+docker network create my_assigment_net
+docker container run --rm --net my_assigment_net --net-alias search elasticsearch:2
+docker container run --rm --net my_assigment_net --net-alias search elasticsearch:2
+docker container run --rm --net my_assigment_net alpine  nslookup search
+docker container run --rm --net my_assigment_net centos curl -s search:9200
+
+Anywhere I do a docker container run <stuff> nginx , 
+where nginx  is the image you should use, replace that with nginx:alpine , 
+which still has ping command in it.
+
