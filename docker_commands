@@ -3,6 +3,7 @@ docker pull {container_name}
 docker image ls (muestra todas las imagenes locales)
 
 **pull and execute image of nginx (publish publica el puerto del contenedor al red del host)
+                            puerto host:puerto container
 docker container run --publish(-p) 80:80 nginx
 docker container run --publish 80:80 --detach(or -d) --name webhost nginx
 docker container run --publish 3306:3306 -d --env(or -e) MYSQL_RANDOM_ROOT_PASSWORD=yes --name databasemysql mysql
@@ -12,7 +13,7 @@ docker container run -d --name nginx nginx
 
 **segundo plano
 docker container run --publish 80:80 --detach nginx
-docker container run -d --name databasemysql -e MYSQL_RANDOM_ROOT_PASSWORD=yes mysql
+docker container run -d --name databasemysql -e MYSQL_RANDOM_ROOT_PASSWORD=true mysql
 
 ** start exisiting container
 docker start {container_name}
@@ -97,3 +98,74 @@ Anywhere I do a docker container run <stuff> nginx ,
 where nginx  is the image you should use, replace that with nginx:alpine , 
 which still has ping command in it.
 
+**image
+docker history nginx:latests
+docker image inspect {image}//revisar informacion de la imagen
+
+//oldway 
+docker inspect {container_name}
+
+//create tag            username docker hub
+docker image tag nginx marcoisaac/nginx
+//old way docker tag
+
+//change tag
+docker image tag marcoisaac/nginx marcoisaac/nginx2
+
+//push image into docker hub
+docker image tag nginx marcoisaac/nginx
+docker login
+docker image push marcoisaac/nginx
+docker logout 
+
+**create an image      name image
+docker image build -t customnginx .
+docker image build -t nginx-with-html .
+docker image tag nginx-with-html:latest marcoisaac/nginx-with-html
+
+
+//tarea
+docker image build -t testnode .
+docker container run --rm -p 80:3000 testnode
+docker tag testnode marcoisaac/testing-node
+docker image push marcoisaac/testing-node
+after delete
+docker container run -d -p 80:3000 marcoisaac/testing-node
+
+
+**volumes and bigmounts
+//volumes
+docker volume ls
+docker volume inspect {volume_name}                                         volumen name  :  location
+docker container run -d --name mysqlvolumes -e MYSQL_RANDOM_ROOT_PASSWORD=true -v mysql-db:/var/lib/mysql  mysql
+docker container run -d --name mysqlvolumes2 -e MYSQL_RANDOM_ROOT_PASSWORD=true -v mysql-db:/var/lib/mysql mysql
+docker container run -d --name mysqlvolumes3 -e MYSQL_RANDOM_ROOT_PASSWORD=true -v mysql-db:/var/lib/mysql mysql
+
+// create volume
+docker volume create
+
+//bind mounts
+docker container run -d --name nignx -p 80:80 -v $(pwd):/usr/share/nginx/html nginx
+
+//checar en nginx actualizado
+http://localhost/testme.txt
+
+// tarea volumes
+docker container run -d --name database1 -v psql-data:/var/lib/postgresql/data postgres:9.6.1
+docker container run -d --name database2 -v psql-data:/var/lib/postgresql/data postgres:9.6.2
+
+// bind mounts
+docker container run -p 80:4000 -v $(pwd):/site bretfisher/jekyll-serve
+
+
+**docker compose
+docker-compose up
+docker-compose up -d
+docker-compose logs
+docker-compose ps
+docker-compose top
+docker-compose down
+docker-compose down -v borrar volumenes tambien
+
+To rebuild this image you must use `docker-compose build` or `docker-compose up --build`.
+docker-compose down --rmi local para borrar imagenes.
