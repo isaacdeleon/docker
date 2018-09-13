@@ -9,7 +9,7 @@ docker container run --publish 80:80 --detach(or -d) --name webhost nginx
 docker container run --publish 3306:3306 -d --env(or -e) MYSQL_RANDOM_ROOT_PASSWORD=yes --name databasemysql mysql
 
 ** check config 
-docker inspect {container_name}
+docker container inspect {container_name}
 
 **execute allready downloaded image
 docker container run -d --name nginx nginx
