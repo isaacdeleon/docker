@@ -2,6 +2,22 @@
 docker pull {container_name}
 docker image ls (muestra todas las imagenes locales)
 
+
+Build your image:
+
+docker build -t imageName .
+Now invoke your program inside a container:
+
+docker run --name myProgram imageName
+Now restart your program by restarting the container:
+
+docker restart myProgram
+Your program changed? Rebuild the image!:
+
+docker rmi imageName
+docker build -t imageName .
+
+
 **pull and execute image of nginx (publish publica el puerto del contenedor al red del host)
                             puerto host:puerto container
 docker container run --publish(-p) 80:80 nginx
